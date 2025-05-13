@@ -1,4 +1,3 @@
-Here's a well-structured `README.md` file based on your Docker Compose setup and instructions:
 
 ---
 
