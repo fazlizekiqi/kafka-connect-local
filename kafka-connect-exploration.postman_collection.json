@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "53810efe-8852-4684-adee-8420b47ded3f",
+		"name": "kafka-connect-exploration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POSTGRES - Create postgres db connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"postgres-source-connector-docflow\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.postgresql.PostgresConnector\",\r\n    \"tasks.max\": \"1\",\r\n    \"database.hostname\": \"postgres-db\",\r\n    \"database.port\": \"5432\",\r\n    \"database.user\": \"dbconnect\",\r\n    \"database.password\": \"123\",\r\n    \"database.dbname\": \"dbconnect\",\r\n    \"database.server.name\": \"docflow-connect-ps\",\r\n    \"table.include.list\": \"public.KAFKA_CONNECT\",\r\n    \"database.history.kafka.bootstrap.servers\": \"broker-1:29092\",\r\n    \"database.history.kafka.topic\": \"kafka-connect-history\",\r\n    \"snapshot.mode\": \"initial\",\r\n    \"include.schema.changes\": \"true\",\r\n    \"poll.interval.ms\": \"100\",\r\n    \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\r\n    \"value.converter\": \"io.confluent.connect.avro.AvroConverter\",\r\n    \"key.converter.schema.registry.url\": \"http://schema-registry:8081\",\r\n    \"value.converter.schema.registry.url\": \"http://schema-registry:8081\",\r\n    \"schema.history.internal.kafka.topic\": \"debezium-schema-history\",\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"broker-1:29092\",\r\n    \"database.history.kafka.recovery.poll.interval.ms\": \"5000\",\r\n    \"plugin.name\": \"pgoutput\",\r\n    \"topic.prefix\": \"docflow\",\r\n    \"slot.name\": \"debezium_slot_1\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POSTGRES - SCHEMA",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"postgres-source-connector-docflow-1\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.postgresql.PostgresConnector\",\r\n    \"tasks.max\": \"1\",\r\n    \"database.hostname\": \"postgres-db\",\r\n    \"database.port\": \"5432\",\r\n    \"database.user\": \"dbconnect\",\r\n    \"database.password\": \"123\",\r\n    \"database.dbname\": \"dbconnect\",\r\n    \"database.server.name\": \"docflow-connect-ps\",\r\n    \"table.include.list\": \"public.KAFKA_CONNECT\",\r\n    \"database.history.kafka.bootstrap.servers\": \"broker-1:29092\",\r\n    \"database.history.kafka.topic\": \"kafka-connect-history\",\r\n    \"snapshot.mode\": \"initial\",\r\n    \"include.schema.changes\": \"true\",\r\n    \"poll.interval.ms\": \"100\",\r\n    \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\r\n    \"value.converter\": \"io.confluent.connect.avro.AvroConverter\",\r\n    \"key.converter.schema.registry.url\": \"http://schema-registry:8081\",\r\n    \"value.converter.schema.registry.url\": \"http://schema-registry:8081\",\r\n    \"schema.history.internal.kafka.topic\": \"debezium-schema-history\",\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"broker-1:29092\",\r\n    \"database.history.kafka.recovery.poll.interval.ms\": \"5000\",\r\n    \"plugin.name\": \"pgoutput\",\r\n    \"slot.name\": \"debezium_slot_2_fresh\",\r\n    \"topic.prefix\": \"new\",\r\n\r\n    \r\n    \"transforms\": \"unwrap\",\r\n    \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\",\r\n    \"transforms.unwrap.drop.tombstones\": \"true\",\r\n    \"transforms.unwrap.delete.handling.mode\": \"drop\",\r\n    \"transforms.unwrap.extract.new.record.key\": \"true\",\r\n    \"transforms.extractKeyField.type\": \"org.apache.kafka.connect.transforms.ExtractField$Key\",\r\n    \"transforms.extractKeyField.field\": \"id\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POSTGRES - Connectors",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POSTGRES Connector Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/postgres-source-connector-docflow/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"postgres-source-connector-docflow",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POSTGRES - Delete connectors",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/postgres-source-connector-docflow-1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"postgres-source-connector-docflow-1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Avaialble connector plugins",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connector-plugins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connector-plugins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create oracle db connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"oracle-source-connector-docflow\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.oracle.OracleConnector\",\r\n    \"tasks.max\": \"1\",\r\n    \"database.hostname\": \"oracle-db\",\r\n    \"database.port\": \"1521\",\r\n    \"database.user\": \"system\",\r\n    \"database.password\": \"123\",\r\n    \"database.server.name\": \"docflow-connect\",\r\n    \"database.dbname\": \"FREEPDB1\",\r\n    \"database.pdb.name\": \"FREEPDB1\",\r\n    \"database.connection.adapter\": \"logminer\",\r\n    \"table.include.list\": \"SYSTEM.DOCFLOW_CONNECT,DBCONNECT.KAFKA_CONNECT\",\r\n    \"database.history.kafka.bootstrap.servers\": \"broker-1:29092\",\r\n    \"database.history.kafka.topic\": \"kafka-connect-history\",\r\n    \"snapshot.mode\": \"initial\",\r\n    \"include.schema.changes\": \"true\",\r\n    \"poll.interval.ms\":\"100\",\r\n    \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\r\n    \"value.converter\": \"io.confluent.connect.avro.AvroConverter\",\r\n    \"key.converter.schema.registry.url\": \"http://schema-registry:8081\",\r\n    \"value.converter.schema.registry.url\": \"http://schema-registry:8081\",\r\n    \"schema.history.internal.kafka.topic\": \"debezium-schema-history\",\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"broker-1:29092\",\r\n    \"database.history.kafka.recovery.poll.interval.ms\": \"5000\",\r\n\r\n    \"topic.prefix\": \"docflow\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Connector Status Copy",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Restart connector",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/oracle-source-connector-docflow/restart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"oracle-source-connector-docflow",
+						"restart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get schema subjects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/subjects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"subjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View latest schema",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/subjects/fredag-value/versions/latest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"subjects",
+						"fredag-value",
+						"versions",
+						"latest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View key type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/subjects/kafka-connect-key/versions/latest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"subjects",
+						"kafka-connect-key",
+						"versions",
+						"latest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Restart AVRO Schema",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/subjects/docflow.public.kafka_connect-value",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subjects",
+						"docflow.public.kafka_connect-value"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
