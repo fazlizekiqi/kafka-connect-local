@@ -46,3 +46,5 @@ zookeeper-2_data
 zookeeper-2_log
 zookeeper-3_data
 zookeeper-3_log
+src
+pom.xml
